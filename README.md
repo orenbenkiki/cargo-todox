@@ -1,4 +1,4 @@
-# cargo-todox
+Ensure source files in a cargo project do not contain `TODOX` issues.
 
 ## Installing
 
@@ -44,6 +44,12 @@ the installation.
 
 ## Why use TODOX?
 
+TL;DR: It remembers for you the issues you need to fix before committing,
+allowing you to focus on the task at hand.
+
+Note this is very different from tracking normal TODO issues, which should be
+handled in future commits.
+
 ### Without TODOX
 
 You are working on some non-trivial issue, deep in focus. In the process, you
@@ -88,5 +94,5 @@ brand new day.
 
 ## License
 
-`cargo-todox` is distributed under the Gnu Public License (Version 3).
-See the [LICENSE](LICENSE) for details.
+`cargo-todox` is distributed under the Gnu General Public License (Version 3).
+See the [LICENSE.md](LICENSE) for details.
