@@ -95,4 +95,4 @@ brand new day.
 ## License
 
 `cargo-todox` is distributed under the Gnu General Public License (Version 3).
-See the [LICENSE.md](LICENSE) for details.
+See the [LICENSE](LICENSE.md) for details.
