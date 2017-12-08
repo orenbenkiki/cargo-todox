@@ -19,8 +19,8 @@ use std::io::{BufReader, BufRead};
 use std::process::{Command, Stdio};
 
 fn main() {
-    if std::env::args().count() != 1 {
-        print!("cargo-todox takes no arguments.\n");
+    if std::env::args().count() > 2 {
+        print!("cargo todox takes no arguments.\n");
         std::process::exit(1);
     }
 
