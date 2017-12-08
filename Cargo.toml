@@ -1,0 +1,6 @@
+[package]
+name = "cargo-todox"
+version = "0.1.0"
+authors = ["Oren Ben-Kiki <oren@ben-kiki.org>"]
+
+[dependencies]
