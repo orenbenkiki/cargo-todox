@@ -4,6 +4,9 @@ cache: cargo
 
 rust:
 - 1.13.0
+- stable
+- beta
+- nightly
 matrix:
   allow-failures:
   - rust: nightly
