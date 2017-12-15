@@ -1,0 +1,17 @@
+# Rust project
+language: rust
+cache: cargo
+
+rust:
+- 1.0.0
+- stable
+- beta
+- nightly
+matrix:
+  allow-failures:
+  - rust: nightly
+
+# Build & Test
+script:
+- cargo build --verbose
+- cargo test --verbose

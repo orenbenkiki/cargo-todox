@@ -1,3 +1,5 @@
+# rustfmt [![Build Status](https://travis-ci.org/orenbenkiki/cargo-todox.svg)](https://travis-ci.org/orenbenkiki/cargo-todox)
+
 Ensure source files in a cargo project do not contain `TODOX` issues.
 
 ## Installing

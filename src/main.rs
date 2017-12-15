@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU General Public License along with
 // cargo-fmt. If not, see <http://www.gnu.org/licenses/>.
 
+//! Ensure source files in a cargo project do not contain `TODOX` issues.
+
 use std::fs::File;
 use std::io::{BufReader, BufRead};
 use std::process::{Command, Stdio};
