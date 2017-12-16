@@ -34,9 +34,9 @@ language: rust
 cache: cargo
 before_script:
 - export PATH="$PATH:$HOME/.cargo/bin"
-- which cargo-todox || cargo install cargo-todox
+- which cargo-todox || cargo install cargo-todox # ALLOW TODOX
 script:
-- cargo todox
+- cargo todox # ALLOW TODOX
 - cargo build
 - cargo test
 ```
