@@ -17,7 +17,7 @@
 //! Ensure source files in a cargo project do not contain `TODOX` issues.
 
 use std::fs::File;
-use std::io::{BufReader, BufRead};
+use std::io::{BufRead, BufReader};
 use std::process::{Command, Stdio};
 
 fn main() {

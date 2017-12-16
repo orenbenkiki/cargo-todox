@@ -1,0 +1,11 @@
+fn_args_density = "Tall"
+fn_args_layout = "Visual"
+array_layout = "Visual"
+generics_indent = "Visual"
+struct_lit_style = "Visual"
+fn_call_style = "Visual"
+chain_indent = "Visual"
+reorder_imports = true
+reorder_imports_in_group = true
+reorder_imported_names = false
+use_try_shorthand = true

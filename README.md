@@ -52,6 +52,21 @@ allowing you to focus on the task at hand.
 Note this is very different from tracking normal TODO issues, which should be
 handled in future commits.
 
+This is similar to using `report_fixme = "Always"` and using `rustfmt`. The
+differences are:
+
+* It looks for the (case insensitive) string `TODOX`, rather than the string
+  `FIXME`.
+
+* It looks _everywhere_ in _all_ source files, rather than only in comments in
+  `.rs` files.
+
+* It allows for exempting lines by saying `ALLOW TODOX` (typically in a
+  comment).
+
+This allows using `todox` as part of the name of a variable, inside comments,
+inside `.toml` files, inside `.yaml` files, in the `README` files, etc.
+
 ### Without TODOX
 
 You are working on some non-trivial issue, deep in focus. In the process, you
