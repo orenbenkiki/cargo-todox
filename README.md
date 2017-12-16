@@ -94,6 +94,10 @@ one, either fixing them, or open an issue for fixing them in a later commit. You
 commit the code, and go to sleep with a clear conscience. Tomorrow will be a
 brand new day.
 
+If, for some reason, you must leave a `TODOX` in your code, include the
+incantation `ALLOW TODOX` in the same line (probably in a comment). This will
+direct `cargo todox` to ignore the use of `TODOX` in this line.
+
 ## License
 
 `cargo-todox` is distributed under the GNU General Public License (Version 3.0).

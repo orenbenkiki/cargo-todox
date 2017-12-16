@@ -64,7 +64,7 @@ fn does_file_contain_todox(path: &str) -> bool {
                         print!("{}:{}: {}\n", path, line_number, error);
                     }
                     Ok(text) => {
-                        if text.to_lowercase().contains("todox") {
+                        if !text.contains("ALLOW TODOX") && text.to_lowercase().contains("todox") {
                             print!("{}:{}: contains todox\n", path, line_number);
                             result = false;
                         }
