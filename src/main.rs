@@ -84,21 +84,25 @@ fn process_args() {
 
     args.nth(0);
     match count {
-        1 => {},
+        1 => {}
         2 => {
             match args.nth(0).unwrap().as_ref() {
-                "--version" => { should_print_version = true; },
-                "todox" => {},
-                _ => { are_args_valid = false; }
+                "--version" => {
+                    should_print_version = true;
+                }
+                "todox" => {}
+                _ => {
+                    are_args_valid = false;
+                }
             }
-        },
+        }
         3 => {
             if args.nth(0).unwrap() == "todox" && args.nth(0).unwrap() == "--version" {
                 should_print_version = true;
             } else {
                 are_args_valid = false;
             }
-        },
+        }
         _ => {
             are_args_valid = false;
         }
