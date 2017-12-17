@@ -1,4 +1,14 @@
 [[package]]
 name = "cargo-todox"
-version = "0.1.5"
+version = "0.1.6"
+dependencies = [
+ "version 2.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
+]
 
+[[package]]
+name = "version"
+version = "2.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[metadata]
+"checksum version 2.0.1 (registry+https://github.com/rust-lang/crates.io-index)" = "4c941215489baf638156fcc85c59a45444709a7ac2093b9b22b45e3cfe80fe26"

@@ -22,6 +22,8 @@ This will list all (case insensitive) occurrences of the string `TODOX` in the
 project source files (taken from `git ls-files`). It will succeed if and only if
 there are no such occurrences.
 
+You can also say `cargo todox --version` to report the version number.
+
 ## Checking TODOX on a CI server
 
 To keep your code base clean, it can be helpful to fail the CI build when a pull
@@ -33,7 +35,6 @@ this:
 language: rust
 cache: cargo
 before_script:
-- export PATH="$PATH:$HOME/.cargo/bin"
 - which cargo-todox || cargo install cargo-todox # ALLOW TODOX
 script:
 - cargo todox # ALLOW TODOX

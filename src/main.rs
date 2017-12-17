@@ -16,15 +16,15 @@
 
 //! Ensure source files in a cargo project do not contain `TODOX` issues.
 
+#[macro_use]
+extern crate version;
+
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::process::{Command, Stdio};
 
 fn main() {
-    if std::env::args().count() > 2 {
-        print!("cargo todox takes no arguments.\n");
-        std::process::exit(1);
-    }
+    process_args();
 
     let output = Command::new("git")
         .arg("ls-files")
@@ -73,5 +73,44 @@ fn does_file_contain_todox(path: &str) -> bool {
             }
             return does_contain_todox;
         }
+    }
+}
+
+fn process_args() {
+    let count = std::env::args().count();
+    let mut args = std::env::args();
+    let mut are_args_valid = true;
+    let mut should_print_version = false;
+
+    args.nth(0);
+    match count {
+        1 => {},
+        2 => {
+            match args.nth(0).unwrap().as_ref() {
+                "--version" => { should_print_version = true; },
+                "todox" => {},
+                _ => { are_args_valid = false; }
+            }
+        },
+        3 => {
+            if args.nth(0).unwrap() == "todox" && args.nth(0).unwrap() == "--version" {
+                should_print_version = true;
+            } else {
+                are_args_valid = false;
+            }
+        },
+        _ => {
+            are_args_valid = false;
+        }
+    }
+
+    if !are_args_valid {
+        print!("cargo-todox takes no arguments (except --version).\n");
+        std::process::exit(1);
+    }
+
+    if should_print_version {
+        println!("cargo-todox {}", version!());
+        std::process::exit(0);
     }
 }
