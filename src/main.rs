@@ -35,7 +35,7 @@ fn main() {
         .expect("failed to wait for git ls-files");
 
     if !output.status.success() {
-        std::process::exit(1);
+        panic!("git ls-files failed");
     }
 
     let mut status = 0;
@@ -56,7 +56,7 @@ fn does_file_contain_todox(path: &str) -> bool {
         }
         Ok(file) => {
             let mut line_number = 0;
-            let mut result = true;
+            let mut does_contain_todox = false;
             for line in BufReader::new(file).lines() {
                 line_number += 1;
                 match line {
@@ -66,12 +66,12 @@ fn does_file_contain_todox(path: &str) -> bool {
                     Ok(text) => {
                         if !text.contains("ALLOW TODOX") && text.to_lowercase().contains("todox") {
                             print!("{}:{}: contains todox\n", path, line_number);
-                            result = false;
+                            does_contain_todox = true;
                         }
                     }
                 }
             }
-            return result;
+            return does_contain_todox;
         }
     }
 }
