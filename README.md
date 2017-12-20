@@ -43,7 +43,7 @@ run_task = "todox"  # ALLOW TODOX
 This will automatically verify the annotations in a new `cargo make todox`, as
 well as as a part of `cargo make format-flow`, and everything that invokes it.
 
-## Checking TODOX on a CI server
+### Checking TODOX on a CI server
 
 To keep your code base clean, it can be helpful to fail the CI build when a pull
 request contains leftover `TODOX` issues. To achieve this, include `cargo todox`
