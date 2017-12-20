@@ -24,6 +24,25 @@ there are no such occurrences.
 
 You can also say `cargo todox --version` to report the version number.
 
+### Integration with cargo make
+
+If you use `cargo make`, here is one way to
+integrate `cargo coverage-annotations` into your workflow:
+
+```toml
+[tasks.todox]  # ALLOW TODOX
+description = "Verify the code does not contain leftover TODOX."  # ALLOW TODOX
+install_crate = "cargo-todox"  # ALLOW TODOX
+command = "cargo"
+args = ["todox"]  # ALLOW TODOX
+
+[tasks.pre-format]
+run_task = "todox"  # ALLOW TODOX
+```
+
+This will automatically verify the annotations in a new `cargo make todox`, as
+well as as a part of `cargo make format-flow`, and everything that invokes it.
+
 ## Checking TODOX on a CI server
 
 To keep your code base clean, it can be helpful to fail the CI build when a pull

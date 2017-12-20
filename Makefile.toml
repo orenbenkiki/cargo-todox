@@ -1,0 +1,11 @@
+[tasks.verify-format]
+description = "Verify the code is formatted as expected by rustfmt."
+install_crate = "rustfmt-nightly"
+command = "cargo"
+args = ["fmt", "--", "--write-mode", "diff"]
+
+[tasks.pre-build]
+run_task = "verify-format"
+
+[tasks.format]
+dependencies = ["format-nightly"]
