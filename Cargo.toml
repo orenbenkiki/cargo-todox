@@ -1,6 +1,6 @@
 [package]
 name = "cargo-todox"
-version = "0.1.7"
+version = "0.1.8"
 authors = ["Oren Ben-Kiki <oren@ben-kiki.org>"]
 description = "Ensure source files in a cargo project do not contain TODOX issues."
 repository = "https://github.com/orenbenkiki/cargo-todox"
@@ -9,5 +9,8 @@ keywords = ["cargo", "git", "subcommand", "build"]
 categories =[ "development-tools::build-utils", "development-tools::cargo-plugins"]
 license = "GPL-3.0"
 
+[dev-dependencies]
+unindent = "^0.1.2"
+
 [dependencies]
-version = "^2.0.1"
+clap = "^2.29.0"

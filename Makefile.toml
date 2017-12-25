@@ -1,3 +1,8 @@
+[env]
+RUST_TEST_THREADS = "1"
+CARGO_MAKE_RUN_CODECOV = "true"
+RUSTFLAGS = "-D warnings"
+
 # TODO: Add this to the ci-flow when rustfmt starts working on Travis.
 [tasks.verify-format]
 description = "Verify the code is formatted as expected by rustfmt."
@@ -7,3 +12,22 @@ args = ["fmt", "--", "--write-mode", "diff"]
 
 [tasks.format]
 dependencies = ["format-nightly"]
+
+[tasks.coverage-annotations-flow]
+description = "Runs the full coverage-annotations flow."
+dependencies = ["test", "coverage", "coverage-annotations"]
+
+[tasks.coverage-annotations]
+description = "Verify the coverage annotations in the code"
+install_crate = "cargo-coverage-annotations"
+command = "cargo"
+args = ["coverage-annotations"]
+
+[tasks.pre-coverage]
+run_task = "test"
+
+[tasks.post-coverage]
+run_task = "coverage-annotations"
+
+[tasks.post-test]
+run_task = "coverage-annotations-flow"

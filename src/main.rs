@@ -17,16 +17,56 @@
 //! Ensure source files in a cargo project do not contain `TODOX` issues.
 
 #[macro_use]
-extern crate version;
+extern crate clap;
+
+#[cfg(test)]
+extern crate unindent;
+
+#[cfg(not(test))]
+use clap::{App, AppSettings, Arg, SubCommand};
+#[cfg(not(test))]
+use std::io;
 
 use std::fs::File;
-use std::io::{BufRead, BufReader};
+use std::io::{BufRead, BufReader, Write};
 use std::process::{Command, Stdio};
 
-fn main() {
-    process_args();
+#[cfg(test)]
+use std::io;
+#[cfg(test)]
+use std::vec::Vec;
+#[cfg(test)]
+use unindent::unindent;
 
-    let output = Command::new("git")
+// BEGIN NOT TESTED
+#[cfg(not(test))]
+fn main() {
+    let matches = App::new("carto")
+        .bin_name("cargo")
+        .version(crate_version!())
+        .about("Ensure source files in a cargo project do not contain TODOX issues.")
+        .setting(AppSettings::SubcommandRequired)
+        .subcommand(SubCommand::with_name("todox")
+                        .about("Scan current working directory for TODOX.")
+                        .version(crate_version!())
+                        .arg(Arg::with_name("output")
+                                 .short("o")
+                                 .long("output")
+                                 .value_name("FILE")
+                                 .help("Redirect output to a file")
+                                 .takes_value(true)))
+        .get_matches();
+    if let Some(output) = matches.subcommand_matches("todox").unwrap().value_of("output") {
+        let mut file = File::create(output).expect(format!("{}: failed to open", output).as_ref());
+        std::process::exit(run(&mut file))
+    } else {
+        std::process::exit(run(&mut io::stderr()))
+    }
+}
+// END NOT TESTED
+
+fn run(output: &mut Write) -> i32 {
+    let ls_files = Command::new("git")
         .arg("ls-files")
         .stdout(Stdio::piped())
         .spawn()
@@ -34,87 +74,61 @@ fn main() {
         .wait_with_output()
         .expect("failed to wait for git ls-files");
 
-    if !output.status.success() {
-        panic!("git ls-files failed");
+    if !ls_files.status.success() {
+        panic!("git ls-files failed"); // NOT TESTED
     }
 
     let mut status = 0;
-    for path in String::from_utf8(output.stdout).unwrap().lines() {
-        if does_file_contain_todox(path) {
+    for path in String::from_utf8(ls_files.stdout).unwrap().lines() {
+        if does_file_contain_todox(output, path) {
             status = 1;
         }
     }
 
-    std::process::exit(status);
+    return status;
 }
 
-fn does_file_contain_todox(path: &str) -> bool {
-    match File::open(path) {
-        Err(error) => {
-            print!("{}: {}\n", path, error);
-            return false;
-        }
-        Ok(file) => {
-            let mut line_number = 0;
-            let mut does_contain_todox = false;
-            for line in BufReader::new(file).lines() {
-                line_number += 1;
-                match line {
-                    Err(error) => {
-                        print!("{}:{}: {}\n", path, line_number, error);
-                    }
-                    Ok(text) => {
-                        if !text.contains("ALLOW TODOX") && text.to_lowercase().contains("todox") {
-                            print!("{}:{}: contains todox\n", path, line_number);
-                            does_contain_todox = true;
-                        }
-                    }
-                }
-            }
-            return does_contain_todox;
+fn does_file_contain_todox(output: &mut Write, path: &str) -> bool {
+    let file = File::open(path).expect(format!("{}: failed to open", path).as_ref());
+    let mut line_number = 0;
+    let mut does_contain_todox = false;
+    for line in BufReader::new(file).lines() {
+        line_number += 1;
+        let text = line.expect(format!("{}:{}: failed to read line", path, line_number).as_ref());
+        if !text.contains("ALLOW TODOX") && text.to_lowercase().contains("todox") {
+            writeln!(output, "{}:{}: contains todox", path, line_number).unwrap();
+            does_contain_todox = true;
         }
     }
+    return does_contain_todox;
 }
 
-fn process_args() {
-    let count = std::env::args().count();
-    let mut args = std::env::args();
-    let mut are_args_valid = true;
-    let mut should_print_version = false;
+#[cfg(test)]
+use std::env;
 
-    args.nth(0);
-    match count {
-        1 => {}
-        2 => {
-            match args.nth(0).unwrap().as_ref() {
-                "--version" => {
-                    should_print_version = true;
-                }
-                "todox" => {}
-                _ => {
-                    are_args_valid = false;
-                }
-            }
-        }
-        3 => {
-            if args.nth(0).unwrap() == "todox" && args.nth(0).unwrap() == "--version" {
-                should_print_version = true;
-            } else {
-                are_args_valid = false;
-            }
-        }
-        _ => {
-            are_args_valid = false;
-        }
-    }
+#[test]
+fn test_success() {
+    env::set_current_dir("tests/success").unwrap();
+    let mut output = io::Cursor::new(Vec::new());
+    assert_eq!(run(&mut output), 0);
+    assert_eq!(std::str::from_utf8(output.get_ref()).unwrap(), "");
+    env::set_current_dir("../..").unwrap();
+}
 
-    if !are_args_valid {
-        print!("cargo-todox takes no arguments (except --version).\n");
-        std::process::exit(1);
-    }
-
-    if should_print_version {
-        println!("cargo-todox {}", version!());
-        std::process::exit(0);
-    }
+#[test]
+fn test_failure() {
+    env::set_current_dir("tests/failure").unwrap();
+    let mut output = io::Cursor::new(Vec::new());
+    assert_eq!(run(&mut output), 1);
+    assert_eq!(
+        std::str::from_utf8(output.get_ref()).unwrap(),
+        unindent(
+            r#"
+        example.txt:1: contains todox
+        example.txt:2: contains todox
+        example.txt:3: contains todox
+    "#,
+        )
+    );
+    env::set_current_dir("../..").unwrap();
 }

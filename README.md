@@ -1,4 +1,4 @@
-# cargo-todox [![Build Status](https://api.travis-ci.org/orenbenkiki/cargo-todox.svg?branch=master)](https://travis-ci.org/orenbenkiki/cargo-todox)
+# cargo-todox [![Build Status](https://api.travis-ci.org/orenbenkiki/cargo-todox.svg?branch=master)](https://travis-ci.org/orenbenkiki/cargo-todox) [![codecov](https://codecov.io/gh/orenbenkiki/cargo-todox/branch/master/graph/badge.svg)](https://codecov.io/gh/orenbenkiki/cargo-todox)
 
 Ensure source files in a cargo project do not contain `TODOX` issues.
 
@@ -22,7 +22,10 @@ This will list all (case insensitive) occurrences of the string `TODOX` in the
 project source files (taken from `git ls-files`). It will succeed if and only if
 there are no such occurrences.
 
-You can also say `cargo todox --version` to report the version number.
+Supported command line flags are:
+* Run `cargo todox --output FILE` to redirect the output to a file.
+* Run `cargo todox --version` to report the version number.
+* Run `cargo todox --help` to get a help message listing the options.
 
 ### Integration with cargo make
 
