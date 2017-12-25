@@ -16,20 +16,21 @@
 
 //! Ensure source files in a cargo project do not contain `TODOX` issues.
 
+#[cfg(not(test))]
 #[macro_use]
 extern crate clap;
 
-#[cfg(test)]
-extern crate unindent;
-
-#[cfg(not(test))]
-use clap::{App, AppSettings, Arg, SubCommand};
 #[cfg(not(test))]
 use std::io;
+#[cfg(not(test))]
+use clap::{App, AppSettings, Arg, SubCommand};
 
 use std::fs::File;
 use std::io::{BufRead, BufReader, Write};
 use std::process::{Command, Stdio};
+
+#[cfg(test)]
+extern crate unindent;
 
 #[cfg(test)]
 use std::io;
