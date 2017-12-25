@@ -42,7 +42,7 @@ use unindent::unindent;
 // BEGIN NOT TESTED
 #[cfg(not(test))]
 fn main() {
-    let matches = App::new("carto")
+    let matches = App::new("cargo")
         .bin_name("cargo")
         .version(crate_version!())
         .about("Ensure source files in a cargo project do not contain TODOX issues.")
