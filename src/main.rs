@@ -21,9 +21,9 @@
 extern crate clap;
 
 #[cfg(not(test))]
-use std::io;
-#[cfg(not(test))]
 use clap::{App, AppSettings, Arg, SubCommand};
+#[cfg(not(test))]
+use std::io;
 
 use std::fs::File;
 use std::io::{BufRead, BufReader, Write};
@@ -47,17 +47,25 @@ fn main() {
         .version(crate_version!())
         .about("Ensure source files in a cargo project do not contain TODOX issues.")
         .setting(AppSettings::SubcommandRequired)
-        .subcommand(SubCommand::with_name("todox")
-                        .about("Scan current working directory for TODOX.")
-                        .version(crate_version!())
-                        .arg(Arg::with_name("output")
-                                 .short("o")
-                                 .long("output")
-                                 .value_name("FILE")
-                                 .help("Redirect output to a file")
-                                 .takes_value(true)))
+        .subcommand(
+            SubCommand::with_name("todox")
+                .about("Scan current working directory for TODOX.")
+                .version(crate_version!())
+                .arg(
+                    Arg::with_name("output")
+                        .short("o")
+                        .long("output")
+                        .value_name("FILE")
+                        .help("Redirect output to a file")
+                        .takes_value(true),
+                ),
+        )
         .get_matches();
-    if let Some(output) = matches.subcommand_matches("todox").unwrap().value_of("output") {
+    if let Some(output) = matches
+        .subcommand_matches("todox")
+        .unwrap()
+        .value_of("output")
+    {
         let mut file = File::create(output).expect(format!("{}: failed to open", output).as_ref());
         std::process::exit(run(&mut file))
     } else {

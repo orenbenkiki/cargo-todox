@@ -13,6 +13,8 @@ matrix:
 
 before_script:
 - which cargo-make || cargo install cargo-make
+- rustup install nightly
+- cargo +nightly install --force rustfmt-nightly
 
 script:
 - cargo make ci-flow

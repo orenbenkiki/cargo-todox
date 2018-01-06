@@ -20,7 +20,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "cargo-todox"
-version = "0.1.8"
+version = "0.1.9"
 dependencies = [
  "clap 2.29.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "unindent 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
