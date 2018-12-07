@@ -11,7 +11,7 @@ matrix:
 
 before_script:
 - which cargo-coverage-annotations && cargo-coverage-annotations --version
-- cargo-install cargo-coverage-annotations --force
+- cargo install cargo-coverage-annotations --version 0.2.1 --force
 - cargo-coverage-annotations --version
 - which cargo-make || cargo install cargo-make
 
