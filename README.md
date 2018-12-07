@@ -1,4 +1,4 @@
-# cargo-todox [![Build Status](https://api.travis-ci.org/orenbenkiki/cargo-todox.svg?branch=master)](https://travis-ci.org/orenbenkiki/cargo-todox) [![codecov](https://codecov.io/gh/orenbenkiki/cargo-todox/branch/master/graph/badge.svg)](https://codecov.io/gh/orenbenkiki/cargo-todox) [![docs](https://docs.rs/cargo-todox/badge.svg)](https://docs.rs/crate/cargo-todox)
+# cargo-todox [![Build Status](https://api.travis-ci.org/orenbenkiki/cargo-todox.svg?branch=master)](https://travis-ci.org/orenbenkiki/cargo-todox) [![codecov](https://codecov.io/gh/orenbenkiki/cargo-todox/branch/master/graph/badge.svg)](https://codecov.io/gh/orenbenkiki/cargo-todox) [![Docs](https://docs.rs/cargo-todox/badge.svg)](https://docs.rs/crate/cargo-todox)
 
 Ensure source files in a cargo project do not contain `TODOX` issues.
 
