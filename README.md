@@ -23,14 +23,15 @@ project source files (taken from `git ls-files`). It will succeed if and only if
 there are no such occurrences.
 
 Supported command line flags are:
+* Run `cargo todox DIRECTORY` to only check files in a specific directory.
 * Run `cargo todox --output FILE` to redirect the output to a file.
 * Run `cargo todox --version` to report the version number.
 * Run `cargo todox --help` to get a help message listing the options.
 
 ### Integration with cargo make
 
-If you use `cargo make`, here is one way to
-integrate `cargo coverage-annotations` into your workflow:
+If you use `cargo make`, here is one way to integrate `cargo todox` into your
+workflow:
 
 ```toml
 [tasks.todox]  # ALLOW TODOX
@@ -39,12 +40,10 @@ install_crate = "cargo-todox"  # ALLOW TODOX
 command = "cargo"
 args = ["todox"]  # ALLOW TODOX
 
-[tasks.pre-format]
-run_task = "todox"  # ALLOW TODOX
+# Verify as part of `cargo make build-flow` and `cargo make ci-flow`.
+[tasks.pre-verify-project]
+dependencies = [..., "todox"]  # ALLOW TODOX
 ```
-
-This will automatically verify the annotations in a new `cargo make todox`, as
-well as as a part of `cargo make format-flow`, and everything that invokes it.
 
 ### Checking TODOX on a CI server
 

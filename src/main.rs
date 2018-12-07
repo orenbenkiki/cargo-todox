@@ -58,30 +58,44 @@ fn main() {
                         .value_name("FILE")
                         .help("Redirect output to a file")
                         .takes_value(true),
+                )
+                .arg(
+                    Arg::with_name("directory")
+                        .help("the directory containing the project files (by default, '.')")
+                        .required(false),
                 ),
         )
         .get_matches();
+
+    let directory = if let Some(argument) = matches.value_of("directory") {
+        argument
+    } else {
+        "."
+    };
+
     if let Some(output) = matches
         .subcommand_matches("todox")
         .unwrap()
         .value_of("output")
     {
-        let mut file = File::create(output).expect(format!("{}: failed to open", output).as_ref());
-        std::process::exit(run(&mut file))
+        let mut file =
+            File::create(output).unwrap_or_else(|_| panic!("{}: failed to open", output));
+        std::process::exit(run(&mut file, directory))
     } else {
-        std::process::exit(run(&mut io::stderr()))
+        std::process::exit(run(&mut io::stderr(), directory))
     }
 }
 // END NOT TESTED
 
-fn run(output: &mut Write) -> i32 {
+fn run(output: &mut Write, directory: &str) -> i32 {
     let ls_files = Command::new("git")
         .arg("ls-files")
+        .arg(directory)
         .stdout(Stdio::piped())
         .spawn()
-        .expect("failed to execute `git ls-files`")
+        .expect(&("failed to execute `git ls-files` ".to_owned() + directory))
         .wait_with_output()
-        .expect("failed to wait for git ls-files");
+        .expect(&("failed to wait for git ls-files ".to_owned() + directory));
 
     if !ls_files.status.success() {
         panic!("git ls-files failed"); // NOT TESTED
@@ -94,50 +108,42 @@ fn run(output: &mut Write) -> i32 {
         }
     }
 
-    return status;
+    status
 }
 
 fn does_file_contain_todox(output: &mut Write, path: &str) -> bool {
-    let file = File::open(path).expect(format!("{}: failed to open", path).as_ref());
-    let mut line_number = 0;
+    let file = File::open(path).unwrap_or_else(|_| panic!("{}: failed to open", path));
     let mut does_contain_todox = false;
-    for line in BufReader::new(file).lines() {
+    for (mut line_number, line) in BufReader::new(file).lines().enumerate() {
         line_number += 1;
-        let text = line.expect(format!("{}:{}: failed to read line", path, line_number).as_ref());
+        let text = line.unwrap_or_else(|_| panic!("{}:{}: failed to read line", path, line_number));
         if !text.contains("ALLOW TODOX") && text.to_lowercase().contains("todox") {
             writeln!(output, "{}:{}: contains todox", path, line_number).unwrap();
             does_contain_todox = true;
         }
     }
-    return does_contain_todox;
+    does_contain_todox
 }
-
-#[cfg(test)]
-use std::env;
 
 #[test]
 fn test_success() {
-    env::set_current_dir("tests/success").unwrap();
     let mut output = io::Cursor::new(Vec::new());
-    assert_eq!(run(&mut output), 0);
+    assert_eq!(run(&mut output, "tests/success"), 0);
     assert_eq!(std::str::from_utf8(output.get_ref()).unwrap(), "");
-    env::set_current_dir("../..").unwrap();
 }
 
 #[test]
 fn test_failure() {
-    env::set_current_dir("tests/failure").unwrap();
     let mut output = io::Cursor::new(Vec::new());
-    assert_eq!(run(&mut output), 1);
+    assert_eq!(run(&mut output, "tests/failure"), 1);
     assert_eq!(
         std::str::from_utf8(output.get_ref()).unwrap(),
         unindent(
             r#"
-        example.txt:1: contains todox
-        example.txt:2: contains todox
-        example.txt:3: contains todox
+        tests/failure/example.txt:1: contains todox
+        tests/failure/example.txt:2: contains todox
+        tests/failure/example.txt:3: contains todox
     "#,
         )
     );
-    env::set_current_dir("../..").unwrap();
 }
