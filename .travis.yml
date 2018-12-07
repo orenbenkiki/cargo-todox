@@ -10,6 +10,9 @@ matrix:
   - rust: nightly
 
 before_script:
+- which cargo-coverage-annotations && cargo-cargo-annotations --version
+- cargo-install cargo-cargo-annotations --force
+- cargo-cargo-annotations --version
 - which cargo-make || cargo install cargo-make
 
 script:
