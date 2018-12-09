@@ -1,6 +1,6 @@
 // Copyright (C) 2017,2018 Oren Ben-Kiki <oren@ben-kiki.org>
 //
-// This file is part of cargo-fmt.
+// This file is part of cargo-todox.
 //
 // cargo-todox is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License, version 3, as published by the
