@@ -2,7 +2,6 @@ language: rust
 cache: cargo
 
 rust:
-- 1.31.0
 - stable
 - nightly
 matrix:
@@ -13,4 +12,4 @@ before_script:
 - which cargo-make || cargo install cargo-make
 
 script:
-- cargo make ci-flow
+- cargo make ci
