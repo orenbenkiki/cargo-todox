@@ -10,7 +10,6 @@ matrix:
 
 before_script:
 - which cargo-make || cargo install cargo-make
-- sudo apt-get install kcov
 
 script:
 - cargo make ci
