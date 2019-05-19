@@ -10,6 +10,10 @@ matrix:
 
 before_script:
 - which cargo-make || cargo install cargo-make
+- sudo apt-get install kcov
 
 script:
 - cargo make ci
+
+after_success:
+- curl -s https://codecov.io/bash | bash

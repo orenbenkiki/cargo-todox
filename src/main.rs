@@ -1,4 +1,4 @@
-// Copyright (C) 2017,2018 Oren Ben-Kiki <oren@ben-kiki.org>
+// Copyright (C) 2017-2019 Oren Ben-Kiki <oren@ben-kiki.org>
 //
 // This file is part of cargo-todox.
 //
