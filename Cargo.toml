@@ -10,7 +10,7 @@ keywords = ["cargo", "git", "subcommand", "build"]
 categories =[ "development-tools::build-utils", "development-tools::cargo-plugins"]
 license = "GPL-3.0"
 
-[badges,travis-ci]
+[badges.travis-ci]
 repository = "orenbenkiki/cargo-todox"
 
 [badges.codecov]
