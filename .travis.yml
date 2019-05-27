@@ -6,6 +6,15 @@ cache:
   - $HOME/.cargo
   - $HOME/.ccache
 
+addons:
+  apt:
+    packages:
+    # For kcov:
+    - binutils-dev
+    - libcurl4-openssl-dev
+    - libdw-dev
+    - libelf-dev
+
 rust:
 - stable
 - nightly
