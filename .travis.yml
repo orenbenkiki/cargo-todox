@@ -9,7 +9,13 @@ cache:
 addons:
   apt:
     packages:
-    - kcov
+    # For kcov:
+    - binutils-dev
+    - cmake
+    - gcc
+    - libcurl4-openssl-dev
+    - libdw-dev
+    - libelf-dev
 
 rust:
 - stable
@@ -22,6 +28,7 @@ matrix:
 before_script:
 - which sccache || cargo install sccache
 - which cargo-make || cargo install cargo-make
+- curl -s https://raw.githubusercontent.com/orenbenkiki/scmf/master/install_kcov.sh | /bin/sh
 
 script:
 - export RUSTC_WRAPPER=`which sccache`
