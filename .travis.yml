@@ -27,6 +27,7 @@ before_script:
 - which sccache || cargo install sccache
 - which cargo-make || cargo install cargo-make
 - curl -s https://raw.githubusercontent.com/orenbenkiki/scmf/master/install_kcov.sh | /bin/sh
+- curl -s https://raw.githubusercontent.com/orenbenkiki/scmf/master/install_kcov.sh
 
 script:
 - export RUSTC_WRAPPER=`which sccache`
