@@ -9,7 +9,8 @@ matrix:
   - rust: nightly
 
 before_script:
-- which cargo-make || cargo install cargo-make
+# - which cargo-make || cargo install cargo-make
+- cargo install --git https://github.com/sagiegurari/cargo-make.git --force cargo-make
 
 script:
 - cargo make ci
