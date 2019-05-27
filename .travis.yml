@@ -16,7 +16,7 @@ rust:
 - nightly
 
 matrix:
-  allow-failures:
+  allow_failures:
   - rust: nightly
 
 before_script:
