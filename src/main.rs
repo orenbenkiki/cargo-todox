@@ -87,7 +87,7 @@ fn main() {
 }
 // END NOT TESTED
 
-fn run(output: &mut Write, directory: &str) -> i32 {
+fn run(output: &mut dyn Write, directory: &str) -> i32 {
     let ls_files = Command::new("git")
         .arg("ls-files")
         .arg(directory)
@@ -111,7 +111,7 @@ fn run(output: &mut Write, directory: &str) -> i32 {
     status
 }
 
-fn does_file_contain_todox(output: &mut Write, path: &str) -> bool {
+fn does_file_contain_todox(output: &mut dyn Write, path: &str) -> bool {
     let file = File::open(path).unwrap_or_else(|_| panic!("{}: failed to open", path));
     let mut does_contain_todox = false;
     for (mut line_number, line) in BufReader::new(file).lines().enumerate() {

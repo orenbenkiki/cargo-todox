@@ -17,7 +17,7 @@ repository = "orenbenkiki/cargo-todox"
 repository = "orenbenkiki/cargo-todox"
 
 [dev-dependencies]
-unindent = "^0.1.2"
+unindent = "^0.1.4"
 
 [dependencies]
 clap = "^2.33.0"
