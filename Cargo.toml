@@ -20,4 +20,4 @@ repository = "orenbenkiki/cargo-todox"
 unindent = "^0.1.5"
 
 [dependencies]
-clap = "^2.33.0"
+clap = "^2.33.1"
