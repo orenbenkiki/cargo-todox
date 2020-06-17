@@ -39,7 +39,8 @@ use std::vec::Vec;
 #[cfg(test)]
 use unindent::unindent;
 
-// BEGIN NOT TESTED
+// TODO: Should be "not tested"
+// BEGIN MAYBE TESTED
 #[cfg(not(test))]
 fn main() {
     let matches = App::new("cargo")
@@ -85,7 +86,7 @@ fn main() {
         std::process::exit(run(&mut io::stderr(), directory))
     }
 }
-// END NOT TESTED
+// END MAYBE TESTED
 
 fn run(output: &mut dyn Write, directory: &str) -> i32 {
     let ls_files = Command::new("git")
