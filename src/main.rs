@@ -1,4 +1,4 @@
-// Copyright (C) 2017-2019 Oren Ben-Kiki <oren@ben-kiki.org>
+// Copyright (C) 2017-2021 Oren Ben-Kiki <oren@ben-kiki.org>
 //
 // This file is part of cargo-todox.
 //
@@ -16,6 +16,14 @@
 
 //! Ensure source files in a cargo project do not contain `TODOX` issues.
 
+#![deny(warnings)]
+#![deny(rust_2018_idioms)]
+#![deny(clippy::all)]
+#![deny(clippy::pedantic)]
+#![deny(clippy::perf)]
+#![deny(clippy::nursery)]
+#![deny(clippy::cargo)]
+
 #[cfg(not(test))]
 #[macro_use]
 extern crate clap;
@@ -30,17 +38,15 @@ use std::io::{BufRead, BufReader, Write};
 use std::process::{Command, Stdio};
 
 #[cfg(test)]
-extern crate unindent;
+use std::io;
 
 #[cfg(test)]
-use std::io;
-#[cfg(test)]
 use std::vec::Vec;
+
 #[cfg(test)]
 use unindent::unindent;
 
 // TODO: Should be "not tested"
-// BEGIN MAYBE TESTED
 #[cfg(not(test))]
 fn main() {
     let matches = App::new("cargo")
@@ -68,25 +74,22 @@ fn main() {
         )
         .get_matches();
 
-    let directory = if let Some(argument) = matches.value_of("directory") {
-        argument
-    } else {
-        "."
-    };
+    let directory = matches
+        .value_of("directory")
+        .map_or(".", |argument| argument);
 
-    if let Some(output) = matches
+    let status = matches
         .subcommand_matches("todox")
         .unwrap()
         .value_of("output")
-    {
-        let mut file =
-            File::create(output).unwrap_or_else(|_| panic!("{}: failed to open", output));
-        std::process::exit(run(&mut file, directory))
-    } else {
-        std::process::exit(run(&mut io::stderr(), directory))
-    }
+        .map_or(run(&mut io::stderr(), directory), |output| {
+            let mut file =
+                File::create(output).unwrap_or_else(|_| panic!("{}: failed to open", output));
+            run(&mut file, directory)
+        });
+
+    std::process::exit(status);
 }
-// END MAYBE TESTED
 
 fn run(output: &mut dyn Write, directory: &str) -> i32 {
     let ls_files = Command::new("git")
