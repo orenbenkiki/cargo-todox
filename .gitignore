@@ -1,12 +1,11 @@
+.cargo
 cobertura.xml
 /docs/
 *junk*
 .make.*
-Makefile.scmf.toml
 **/*.rs.bk
 .*.sw*
 tags
 TAGS
-.target.*
 target
 tarpaulin-*
