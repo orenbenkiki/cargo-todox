@@ -1,12 +1,10 @@
-ALL_SOURCES = $(shell git ls-files .)
-
 RS_SOURCES = $(filter %.rs, $(ALL_SOURCES))
 
 TOML_SOURCES = $(filter %.toml, $(ALL_SOURCES))
 
 CARGO_SOURCES = $(RS_SOURCES) $(TOML_SOURCES)
 
-TEST_FLAGS = RUST_TEST_THREADS=1 RUST_BACKTRACE=1
+TEST_FLAGS = RUST_BACKTRACE=1
 
 define PRINT_HELP_PYSCRIPT
 import re, sys
@@ -66,6 +64,7 @@ coverage: .make.coverage  ## generate coverage report
 
 .make.coverage: .make.test # $(CARGO_SOURCES)
 	mv .cargo/config.toml .cargo/_config.toml
+	rm -f tarpaulin*
 	$(TEST_FLAGS) cargo tarpaulin --skip-clean --out Xml
 	mv .cargo/_config.toml .cargo/config.toml
 	touch $@
@@ -94,14 +93,14 @@ audit: .make.audit  ## audit dependencies for bugs or security issues
 	cargo audit
 	touch $@
 
-common: fmt clippy test ca doc outdated audit
+common: fmt clippy test ca doc
 
-dev: refmt tags common ## verify during development
+dev: refmt tags common outdated audit ## verify during development
 
 staged:  ## check everything is staged for git commit
 	@if git status . | grep -q 'Changes not staged\|Untracked files'; then git status; false; else true; fi
 
-pc: staged common  ## verify everything before commit
+pc: staged common outdated audit  ## verify everything before commit
 
 pre-publish: .cargo/config.toml  ## publish dry run
 	cargo publish --dry-run
@@ -114,9 +113,13 @@ publish: ci  ## actually publish
 tags: $(RS_SOURCES)  ## tags file for vim or Emacs.
 	ctags --recurse .
 
-clean:  ## remove all generated files
+clobber:  ## remove all generated files
 	rm -f .make.* tags
 	rm -rf .cargo target
+
+clean:  ## remove generated files except for dependencies
+	rm -f .make.* tags tarpaulin*
+	rm -rf .cargo `find target -name '*clacks*'`
 
 .cargo/config.toml:
 	mkdir -p .cargo

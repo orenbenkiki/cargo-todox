@@ -14,8 +14,7 @@
 // You should have received a copy of the GNU General Public License along with
 // cargo-todox. If not, see <http://www.gnu.org/licenses/>.
 
-//! Ensure source files in a cargo project do not contain `TODOX` issues.
-
+#![doc = include_str!("../README.md")]
 #![deny(warnings)]
 #![deny(rust_2018_idioms)]
 #![deny(clippy::all)]

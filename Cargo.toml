@@ -1,7 +1,7 @@
 [package]
 edition = "2021"
 name = "cargo-todox"
-version = "0.2.3"
+version = "0.2.4"
 authors = ["Oren Ben-Kiki <oren@ben-kiki.org>"]
 description = "Ensure source files in a cargo project do not contain TODOX issues."
 repository = "https://github.com/orenbenkiki/cargo-todox"
@@ -9,12 +9,6 @@ readme = "README.md"
 keywords = ["cargo", "git", "subcommand", "build"]
 categories =[ "development-tools::build-utils", "development-tools::cargo-plugins"]
 license = "GPL-3.0"
-
-[badges.travis-ci]
-repository = "orenbenkiki/cargo-todox"
-
-[badges.codecov]
-repository = "orenbenkiki/cargo-todox"
 
 [dev-dependencies]
 unindent = "^0.1.7"
