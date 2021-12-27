@@ -1,3 +1,5 @@
+ALL_SOURCES = $(shell git ls-files .)
+
 RS_SOURCES = $(filter %.rs, $(ALL_SOURCES))
 
 TOML_SOURCES = $(filter %.toml, $(ALL_SOURCES))

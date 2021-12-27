@@ -47,6 +47,7 @@ use unindent::unindent;
 
 // TODO: Should be "not tested"
 #[cfg(not(test))]
+#[doc(hidden)]
 fn main() {
     let matches = App::new("cargo")
         .bin_name("cargo")
@@ -90,6 +91,7 @@ fn main() {
     std::process::exit(status);
 }
 
+#[doc(hidden)]
 fn run(output: &mut dyn Write, directory: &str) -> i32 {
     let ls_files = Command::new("git")
         .arg("ls-files")
@@ -114,6 +116,7 @@ fn run(output: &mut dyn Write, directory: &str) -> i32 {
     status
 }
 
+#[doc(hidden)]
 fn does_file_contain_todox(output: &mut dyn Write, path: &str) -> bool {
     let file = File::open(path).unwrap_or_else(|_| panic!("{}: failed to open", path));
     let mut does_contain_todox = false;
