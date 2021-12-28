@@ -8,6 +8,12 @@ CARGO_SOURCES = $(RS_SOURCES) $(TOML_SOURCES)
 
 TEST_FLAGS = RUST_BACKTRACE=1
 
+TEST_EXTRA_FLAGS = -- --nocapture
+
+ifneq ($(wildcard .single-thread-tests),)
+TEST_EXTRA_FLAGS += --test-threads 1
+endif
+
 define PRINT_HELP_PYSCRIPT
 import re, sys
 
@@ -22,15 +28,15 @@ export PRINT_HELP_PYSCRIPT
 help:  ## print this error message
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
-ifeq ($(wildcard $(.no_todo_x)),)
-todo_x:
+ifeq ($(wildcard .no-todo-x),)
+todo-x: .make.todo-x  ## check for leftover TODOX # ALLOW TODOX
 else
-todo_x: .make.todo_x  ## check for leftover TODOX # ALLOW TODOX
+todo-x:
 endif
 
 TODO = todo$()x
 
-.make.todo_x: $(TODO_X_SOURCES) # ALLOW TODOX
+.make.todo-x: $(TODO_X_SOURCES) # ALLOW TODOX
 	cargo $(TODO)
 	touch $@
 
@@ -68,20 +74,24 @@ build: .make.build  ## build everything
 test: .make.test  ## run tests
 
 .make.test: .cargo/config.toml .make.build
-	$(TEST_FLAGS) cargo test -- --nocapture
+	$(TEST_FLAGS) cargo test $(TEST_EXTRA_FLAGS)
 	touch $@
 
 retest: .cargo/config.toml  ## force re-run tests with nocapture
-	$(TEST_FLAGS) cargo test -- --nocapture
+	$(TEST_FLAGS) cargo test $(TEST_EXTRA_FLAGS)
 
 coverage: .make.coverage  ## generate coverage report
 
 .make.coverage: .make.test
 	rm -f tarpaulin*
-	$(TEST_FLAGS) cargo tarpaulin --skip-clean --out Xml
+	$(TEST_FLAGS) cargo tarpaulin --skip-clean --out Xml $(TEST_EXTRA_FLAGS)
 	touch $@
 
+ifeq ($(wildcard .no-coverage-annotations),)
 coverage-annotations: .make.coverage-annotations  ## check coverage annotations in code
+else
+coverage-annotations:
+endif
 
 .make.coverage-annotations: .cargo/config.toml .make.coverage
 	cargo coverage-annotations
@@ -111,7 +121,7 @@ audit: .make.audit  ## audit dependencies for bugs or security issues
 	cargo audit
 	touch $@
 
-common: todo_x formatted smells udeps coverage-annotations doc
+common: todo-x formatted smells udeps coverage-annotations doc
 
 dev: reformat tags common outdated audit  ## verify during development
 
@@ -120,8 +130,11 @@ staged:  ## check everything is staged for git commit
 
 pre-commit: staged common outdated audit  ## verify everything before commit
 
-pre-publish: .cargo/config.toml  ## publish dry run (post-commit)
+pre-publish: .make.pre-publish  ## publish dry run (post-commit, pre-push)
+
+.make.pre-publish: $(ALL_SOURCES)
 	cargo publish --dry-run
+	touch $@
 
 on-push: common pre-publish  ## verify a pushed commit in a CI action
 
