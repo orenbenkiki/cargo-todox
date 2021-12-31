@@ -42,8 +42,8 @@ use std::vec::Vec;
 #[cfg(test)]
 use unindent::unindent;
 
-/// The current crate version: 0.2.4
-pub const VERSION: &str = "0.2.4";
+/// The current crate version: 0.2.5-dev
+pub const VERSION: &str = "0.2.5-dev";
 
 #[cfg(not(test))]
 #[doc(hidden)]
