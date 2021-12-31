@@ -24,11 +24,8 @@
 #![deny(clippy::cargo)]
 
 #[cfg(not(test))]
-#[macro_use]
-extern crate clap;
-
-#[cfg(not(test))]
 use clap::{App, AppSettings, Arg, SubCommand};
+
 #[cfg(not(test))]
 use std::io;
 
@@ -45,19 +42,21 @@ use std::vec::Vec;
 #[cfg(test)]
 use unindent::unindent;
 
-// TODO: Should be "not tested"
+/// The current crate version: 0.2.4-dev
+pub const VERSION: &str = "0.2.4-dev";
+
 #[cfg(not(test))]
 #[doc(hidden)]
 fn main() {
     let matches = App::new("cargo")
         .bin_name("cargo")
-        .version(crate_version!())
+        .version(VERSION)
         .about("Ensure source files in a cargo project do not contain TODOX issues.")
         .setting(AppSettings::SubcommandRequired)
         .subcommand(
             SubCommand::with_name("todox")
                 .about("Scan current working directory for TODOX.")
-                .version(crate_version!())
+                .version(VERSION)
                 .arg(
                     Arg::with_name("output")
                         .short("o")

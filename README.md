@@ -1,4 +1,4 @@
-# cargo-todox
+# cargo-todox v0.2.4-dev
 
 [![Verify pushed commit](https://github.com/orenbenkiki/cargo-todox/actions/workflows/on_push.yml/badge.svg)](https://github.com/orenbenkiki/cargo-todox/actions/workflows/on_push.yml) [![Monthly audit](https://github.com/orenbenkiki/cargo-todox/actions/workflows/monthly_audit.yml/badge.svg)](https://github.com/orenbenkiki/cargo-todox/actions/workflows/on_updated_dependencies.yml) [![codecov](https://codecov.io/gh/orenbenkiki/cargo-todox/branch/master/graph/badge.svg)](https://codecov.io/gh/orenbenkiki/cargo-todox) [![Api Docs](https://docs.rs/cargo-todox/badge.svg)](https://docs.rs/crate/cargo-todox)
 
