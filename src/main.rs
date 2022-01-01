@@ -24,7 +24,7 @@
 #![deny(clippy::cargo)]
 
 #[cfg(not(test))]
-use clap::{App, AppSettings, Arg, SubCommand};
+use clap::{App, AppSettings, Arg};
 
 #[cfg(not(test))]
 use std::io;
@@ -54,19 +54,19 @@ fn main() {
         .about("Ensure source files in a cargo project do not contain TODOX issues.")
         .setting(AppSettings::SubcommandRequired)
         .subcommand(
-            SubCommand::with_name("todox")
+            App::new("todox")
                 .about("Scan current working directory for TODOX.")
                 .version(VERSION)
                 .arg(
-                    Arg::with_name("output")
-                        .short("o")
+                    Arg::new("output")
+                        .short('o')
                         .long("output")
                         .value_name("FILE")
                         .help("Redirect output to a file")
                         .takes_value(true),
                 )
                 .arg(
-                    Arg::with_name("directory")
+                    Arg::new("directory")
                         .help("the directory containing the project files (by default, '.')")
                         .required(false),
                 ),
