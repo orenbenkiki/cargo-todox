@@ -14,4 +14,4 @@ license = "GPL-3.0"
 unindent = "^0.1.7"
 
 [dependencies]
-clap = "^3.0.1"
+clap = "^3.0.14"

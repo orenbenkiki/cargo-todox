@@ -1,0 +1,187 @@
+[config.modify_core_tasks]
+private = true
+namespace = "default"
+
+[env]
+RUSTFLAGS = "-D warnings"
+
+[tasks.pc]
+category = "Flows / Top"
+description = "Cleanup, prepare, audit, verify and generate the documentation before commit."
+dependencies = [
+    "pre-pc",
+    "cleanup",
+    "prepare",
+    "ci",
+    "post-pc"
+]
+
+[tasks.pre-pc]
+private = true
+description = "Customization point for additional pre-commit steps."
+
+[tasks.post-pc]
+private = true
+description = "Customization point for additional pre-commit steps."
+
+[tasks.cleanup]
+category = "Flows / Basic"
+description = "Completely clean the current working directory."
+dependencies = [
+    "pre-cleanup",
+    "clean",
+    "post-cleanup"
+]
+
+[tasks.pre-cleanup]
+private = true
+description = "Customization point for additional cleanup steps."
+
+[tasks.post-cleanup]
+private = true
+description = "Customization point for additional cleanup steps."
+
+[tasks.clean]
+category = "Steps / Cleanup"
+extend = "default::clean"
+private = false
+
+[tasks.prepare]
+category = "Flows / Basic"
+description = "Prepare the working directory for commit."
+dependencies = [
+    "pre-prepare",
+    "format",
+    "post-prepare"
+]
+
+[tasks.pre-prepare]
+private = true
+description = "Customization point for additional preparation steps."
+
+[tasks.post-prepare]
+private = true
+description = "Customization point for additional preparation steps."
+
+[tasks.format]
+category = "Steps / Prepare"
+extend = "default::format"
+private = false
+condition = { env_not_set = [ "SCMF_DISABLE_FORMAT" ] }
+
+[tasks.ci]
+category = "Flows / Top"
+description = "Audit, verify and generate the documentation in continuous integration builds."
+dependencies = [
+    "pre-ci",
+    "verify",
+    "audit",
+    "doc",
+    "post-ci"
+]
+
+[tasks.pre-ci]
+private = true
+description = "Customization point for additional verification steps."
+
+[tasks.post-ci]
+private = true
+description = "Customization point for additional verification steps."
+
+[tasks.audit]
+category = "Flows / Basic"
+description = "Audit the source files for correctness."
+dependencies = [
+    "pre-audit",
+    "check-format",
+    "clippy",
+    "todox",
+    "coverage-annotations",
+    "outdated",
+    "post-audit",
+]
+
+[tasks.pre-audit]
+private = true
+description = "Customization point for additional audit steps."
+
+[tasks.post-audit]
+private = true
+description = "Customization point for additional audit steps."
+
+[tasks.check-format]
+category = "Steps / Audit"
+extend = "default::check-format"
+private = false
+condition = { env_not_set = [ "SCMF_DISABLE_CHECK_FORMAT" ] }
+
+[tasks.clippy]
+category = "Steps / Audit"
+extend = "default::clippy"
+private = false
+condition = { env_not_set = [ "SCMF_DISABLE_CLIPPY" ] }
+
+[tasks.outdated]
+category = "Steps / Audit"
+extend = "default::outdated"
+private = false
+condition = { env_not_set = [ "SCMF_DISABLE_OUTDATED" ] }
+
+[tasks.todox]  # ALLOW TODOX
+category = "Steps / Audit"
+description = "Verify the code does not contain leftover TODOX."  # ALLOW TODOX
+install_crate = "cargo-todox"  # ALLOW TODOX
+command = "cargo"
+args = ["todox"]  # ALLOW TODOX
+condition = { env_not_set = [ "SCMF_DISABLE_TODOX" ] }  # ALLOW TODOX
+
+[tasks.verify]
+category = "Flows / Basic"
+description = "Build and test the code."
+dependencies = [
+    "pre-verify",
+    "build",
+    "test",
+    "coverage",
+    "post-verify",
+]
+
+[tasks.pre-verify]
+private = true
+description = "Customization point for additional verification steps."
+
+[tasks.post-verify]
+private = true
+description = "Customization point for additional verification steps."
+
+[tasks.build]
+category = "Steps / Verify"
+extend = "default::build"
+private = false
+
+[tasks.test]
+category = "Steps / Verify"
+description = "Run tests."
+extend = "default::test"
+private = false
+
+[tasks.coverage]
+category = "Steps / Verify"
+extend = "default::coverage"
+private = false
+
+[tasks."default::coverage-kcov"]
+env = { "CARGO_MAKE_KCOV_INCLUDE_PATTERN" = "${CARGO_MAKE_WORKING_DIRECTORY}/src/,${CARGO_MAKE_WORKING_DIRECTORY}/tests/" }
+
+[tasks.coverage-annotations]
+category = "Steps / Verify"
+description = "Verify the coverage annotations in the code."
+install_crate = "cargo-coverage-annotations"
+command = "cargo"
+args = ["coverage-annotations"]
+condition = { env_not_set = [ "SCMF_DISABLE_COVERAGE_ANNOTATIONS" ] }
+
+[tasks.doc]
+category = "Steps / Doc"
+extend = "default::docs"
+private = false

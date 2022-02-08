@@ -68,22 +68,22 @@ fn main() {
                 .arg(
                     Arg::new("directory")
                         .help("the directory containing the project files (by default, '.')")
-                        .required(false),
-                ),
+                        .required(false), // FLAKY TESTED
+                ), // FLAKY TESTED
         )
-        .get_matches();
+        .get_matches(); // FLAKY TESTED
 
     let directory = matches
-        .value_of("directory")
+        .value_of("directory") // FLAKY TESTED
         .map_or(".", |argument| argument);
 
     let status = matches
         .subcommand_matches("todox")
         .unwrap()
-        .value_of("output")
-        .map_or(run(&mut io::stderr(), directory), |output| {
-            let mut file =
-                File::create(output).unwrap_or_else(|_| panic!("{}: failed to open", output));
+        .value_of("output") // FLAKY TESTED
+        .map_or(run(&mut io::stderr(), directory), |output| { // FLAKY TESTED
+            let mut file = // FLAKY TESTED
+                File::create(output).unwrap_or_else(|_| panic!("{}: failed to open", output)); // FLAKY TESTED
             run(&mut file, directory)
         });
 
@@ -101,9 +101,7 @@ fn run(output: &mut dyn Write, directory: &str) -> i32 {
         .wait_with_output()
         .expect(&("failed to wait for git ls-files ".to_owned() + directory));
 
-    if !ls_files.status.success() {
-        panic!("git ls-files failed"); // NOT TESTED
-    }
+    assert!(ls_files.status.success(), "git ls-files failed");
 
     let mut status = 0;
     for path in String::from_utf8(ls_files.stdout).unwrap().lines() {

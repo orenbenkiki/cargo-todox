@@ -152,7 +152,7 @@ clobber:  ## remove all generated files
 
 clean:  ## remove generated files except for dependencies
 	rm -f .make.* tags tarpaulin*
-	rm -rf .cargo `find target -name '*clacks*'`
+	rm -rf .cargo `find target -name '*cargo-todo*'`
 
 .cargo/config.toml:
 	mkdir -p .cargo
