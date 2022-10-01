@@ -24,14 +24,14 @@
 #![deny(clippy::cargo)]
 
 #[cfg(not(test))]
-use clap::{App, AppSettings, Arg};
+use clap::{command, Arg, Command as ClapCommand};
 
 #[cfg(not(test))]
 use std::io;
 
 use std::fs::File;
 use std::io::{BufRead, BufReader, Write};
-use std::process::{Command, Stdio};
+use std::process::{Command as ProcessCommand, Stdio};
 
 #[cfg(test)]
 use std::io;
@@ -48,13 +48,13 @@ pub const VERSION: &str = "0.2.5-dev";
 #[cfg(not(test))]
 #[doc(hidden)]
 fn main() {
-    let matches = App::new("cargo")
+    let matches = command!()
         .bin_name("cargo")
         .version(VERSION)
         .about("Ensure source files in a cargo project do not contain TODOX issues.")
-        .setting(AppSettings::SubcommandRequired)
+        .subcommand_required(true)
         .subcommand(
-            App::new("todox")
+            ClapCommand::new("todox")
                 .about("Scan current working directory for TODOX.")
                 .version(VERSION)
                 .arg(
@@ -63,7 +63,7 @@ fn main() {
                         .long("output")
                         .value_name("FILE")
                         .help("Redirect output to a file")
-                        .takes_value(true),
+                        .num_args(1),
                 )
                 .arg(
                     Arg::new("directory")
@@ -74,13 +74,13 @@ fn main() {
         .get_matches(); // FLAKY TESTED
 
     let directory = matches
-        .value_of("directory") // FLAKY TESTED
+        .get_one::<String>("directory") // FLAKY TESTED
         .map_or(".", |argument| argument);
 
     let status = matches
         .subcommand_matches("todox")
         .unwrap()
-        .value_of("output") // FLAKY TESTED
+        .get_one::<String>("output") // FLAKY TESTED
         .map_or(run(&mut io::stderr(), directory), |output| { // FLAKY TESTED
             let mut file = // FLAKY TESTED
                 File::create(output).unwrap_or_else(|_| panic!("{}: failed to open", output)); // FLAKY TESTED
@@ -92,7 +92,7 @@ fn main() {
 
 #[doc(hidden)]
 fn run(output: &mut dyn Write, directory: &str) -> i32 {
-    let ls_files = Command::new("git")
+    let ls_files = ProcessCommand::new("git")
         .arg("ls-files")
         .arg(directory)
         .stdout(Stdio::piped())

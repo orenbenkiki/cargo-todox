@@ -144,7 +144,7 @@ publish: on-push monthly  ## actually publish
 	cargo publish
 
 tags: $(RS_SOURCES)  ## tags file for vim or Emacs.
-	ctags --recurse .
+	ctags --recurse src tests
 
 clobber:  ## remove all generated files
 	rm -f .make.* tags cobertura.xml
