@@ -83,7 +83,7 @@ fn main() {
         .get_one::<String>("output") // FLAKY TESTED
         .map_or(run(&mut io::stderr(), directory), |output| { // FLAKY TESTED
             let mut file = // FLAKY TESTED
-                File::create(output).unwrap_or_else(|_| panic!("{}: failed to open", output)); // FLAKY TESTED
+                File::create(output).unwrap_or_else(|_| panic!("{output}: failed to open")); // FLAKY TESTED
             run(&mut file, directory)
         });
 
@@ -115,13 +115,13 @@ fn run(output: &mut dyn Write, directory: &str) -> i32 {
 
 #[doc(hidden)]
 fn does_file_contain_todox(output: &mut dyn Write, path: &str) -> bool {
-    let file = File::open(path).unwrap_or_else(|_| panic!("{}: failed to open", path));
+    let file = File::open(path).unwrap_or_else(|_| panic!("{path}: failed to open"));
     let mut does_contain_todox = false;
     for (mut line_number, line) in BufReader::new(file).lines().enumerate() {
         line_number += 1;
-        let text = line.unwrap_or_else(|_| panic!("{}:{}: failed to read line", path, line_number));
+        let text = line.unwrap_or_else(|_| panic!("{path}:{line_number}: failed to read line"));
         if !text.contains("ALLOW TODOX") && text.to_lowercase().contains("todox") {
-            writeln!(output, "{}:{}: contains todox", path, line_number).unwrap();
+            writeln!(output, "{path}:{line_number}: contains todox").unwrap();
             does_contain_todox = true;
         }
     }
