@@ -81,7 +81,7 @@ fn main() {
         .subcommand_matches("todox")
         .unwrap()
         .get_one::<String>("output") // FLAKY TESTED
-        .map_or(run(&mut io::stderr(), directory), |output| { // FLAKY TESTED
+        .map_or_else(|| run(&mut io::stderr(), directory), |output| { // FLAKY TESTED
             let mut file = // FLAKY TESTED
                 File::create(output).unwrap_or_else(|_| panic!("{output}: failed to open")); // FLAKY TESTED
             run(&mut file, directory)
