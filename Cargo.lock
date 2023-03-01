@@ -152,9 +152,9 @@ dependencies = [
 
 [[package]]
 name = "unindent"
-version = "0.2.0"
+version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c07e1a842213202c2c73ae4c43761d1e3343c1bf74eb05c3a0a5e6f5847b9313"
+checksum = "5aa30f5ea51ff7edfc797c6d3f9ec8cbd8cfedef5371766b7181d33977f4814f"
 
 [[package]]
 name = "winapi"
