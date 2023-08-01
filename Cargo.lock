@@ -195,9 +195,9 @@ checksum = "73473c0e59e6d5812c5dfe2a064a6444949f089e20eec9a2e5506596494e4623"
 
 [[package]]
 name = "unindent"
-version = "0.2.1"
+version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5aa30f5ea51ff7edfc797c6d3f9ec8cbd8cfedef5371766b7181d33977f4814f"
+checksum = "0f86d931b9d0b666761dcfcbac3ec5e9daff8a2becfff93a8fce2591ae297b95"
 
 [[package]]
 name = "utf8parse"
