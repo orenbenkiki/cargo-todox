@@ -84,7 +84,7 @@ coverage: .make.coverage  ## generate coverage report
 
 .make.coverage: .make.test
 	rm -f tarpaulin*
-	$(TEST_FLAGS) cargo tarpaulin --skip-clean --out Xml $(TEST_EXTRA_FLAGS)
+	$(TEST_FLAGS) cargo tarpaulin --skip-clean --out xml $(TEST_EXTRA_FLAGS)
 	touch $@
 
 ifeq ($(wildcard .no-coverage-annotations),)
