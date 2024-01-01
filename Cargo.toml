@@ -14,4 +14,4 @@ license = "GPL-3.0"
 unindent = "^0.2.3"
 
 [dependencies]
-clap = { version = "^4.4.10", features = [ "cargo" ] }
+clap = { version = "^4.4.12", features = [ "cargo" ] }
