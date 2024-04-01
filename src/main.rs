@@ -37,9 +37,6 @@ use std::process::{Command as ProcessCommand, Stdio};
 use std::io;
 
 #[cfg(test)]
-use std::vec::Vec;
-
-#[cfg(test)]
 use unindent::unindent;
 
 /// The current crate version: 0.2.5-dev
@@ -77,18 +74,18 @@ fn main() {
         .get_one::<String>("directory") // FLAKY TESTED
         .map_or(".", |argument| argument);
 
-    let status = matches
+    let status = matches // FLAKY TESTED
         .subcommand_matches("todox")
         .unwrap()
         .get_one::<String>("output") // FLAKY TESTED
         .map_or_else(|| run(&mut io::stderr(), directory), |output| { // FLAKY TESTED
             let mut file = // FLAKY TESTED
                 File::create(output).unwrap_or_else(|_| panic!("{output}: failed to open")); // FLAKY TESTED
-            run(&mut file, directory)
+            run(&mut file, directory) // FLAKY TESTED
         });
 
     std::process::exit(status);
-}
+} // FLAKY TESTED
 
 #[doc(hidden)]
 fn run(output: &mut dyn Write, directory: &str) -> i32 {
